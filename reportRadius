@@ -1,0 +1,160 @@
+#!/usr/bin/env python
+
+import cgi
+import cgitb; cgitb.enable()  # for troubleshooting
+import time, calendar, os
+from socket import gethostname, gethostbyname 
+
+LX_QUEUE = '/datastore2/lxarchive/lx.queue'
+LX_OUTDIR = '/datastore2/media/'
+
+######
+# Functions needed to decode reports and feeds
+def timeStamp2time( S ):
+	###
+	# converts a timeStamp into a time in seconds
+	# this would be simpler if we didn't want the fractional part 
+	# in ns
+	if S[-1] == 'Z':
+		S = S[:-1]
+	if '.' in S:	#amazingly, sometimes a fractional part isn't passed
+		nano    = S.split('.')[1]
+	else:
+		nano = '0'
+	while len(nano) < 9:
+		nano += '0'
+	nano   = int( nano )
+	#there are a couple of different formats that I'd like to support
+	try:
+		sec    = calendar.timegm( time.strptime( S[:19], '%Y-%m-%dT%H:%M:%S' ) )
+	except:
+		sec    = calendar.timegm( time.strptime( S[:19], '%Y/%m/%dT%H:%M:%S' ) )
+	t      =  sec + nano/1e9
+	
+	return t
+	
+def time2timeStamp( t ):
+	S = time.strftime( '%Y-%m-%dT%H:%M:%S', time.gmtime( t ) )
+	#that gets us to the second, we still have to deal with the fractional part
+	S += ('%0.9f'%np.modf( t )[0])[1:]
+	
+	return S
+
+
+print "Content-type: text/html"
+print
+
+print """
+<html>
+  <head>
+    <title>LxArchive - by Earth Networks</title>
+  </head>
+
+  <body>
+    <div><a href="http://lts.ensb.us/lxarchive/">Lx Archive</a></div>
+    <hr>
+
+<h1>Lx Historical Report Request</h1>
+<P>
+Data requested by the LX Archive tool is currently being fetched.  
+The request may take some time to be completed, depended on the number 
+of requests currently in the queue, and how much data you have requested.  
+Typically, each day of data requested requires approximately 30 seconds 
+to be filled.  
+</P>
+<P>
+The url's provided below have not yet been populated, but are where the 
+data will be stored when your request has been serviced.
+</P>
+
+<p>
+<h3>Input Validation</h3>	
+"""
+########################################################################
+# dynamic content goes here
+
+######
+# Validation
+form = cgi.FieldStorage()
+formGood = True
+
+prefix = form.getvalue("prefix", 'lxarchive_')
+###
+# deal with prefix formatting
+prefix = '_'.join( prefix.split() )
+if prefix[-1] != '_' and prefix[-1] != '-':
+	prefix = prefix+'_'
+
+# get time range
+try:
+	timeStampMin = form.getvalue("timeMin", None)
+	timeMin = timeStamp2time( timeStampMin.strip() )
+	timeStampMax = form.getvalue("timeMax", None)
+	timeMax = timeStamp2time( timeStampMax.strip() )
+	if timeMin > timeMax:
+		raise ValueError
+	#~ print 'Time Validation : OK <P>'
+except:
+	formGood = False
+	print 'Time Validation : ERROR <P>'
+
+# get center
+try:
+	centerLat = form.getvalue("centerLat", None)
+	centerLon = float( centerLat )
+	latMax = form.getvalue("centerLon", None)
+	centerLon = float( centerLon )
+	if centerLat < -90 or centerLat > 90 or centerLon < -180 or centerLon > 180:
+		raise ValueError
+	#~ print 'Latitude Validation : OK <P>'
+except:
+	formGood = False
+	print 'Latitude Validation : ERROR <P>'
+
+#radius (km)
+try:
+	radius = form.getvalue("radius", None)
+	radius = float( radius )
+
+	if radius > 500 or radius < 0:
+		raise ValueError
+
+except:
+	formGood = False
+	print 'Longitude Validation : ERROR <P>'
+
+######
+# append request to queue
+if formGood:
+	#we only read it in to get out position in line
+	f = open( LX_QUEUE, 'r' )
+	lines = f.readlines()
+	f.close()
+	
+	key = str( int( time.time() ) )
+	outDir = os.path.join( LX_OUTDIR, key  )
+	if not os.path.exists( outDir ):
+		os.makedirs( outDir )
+	
+	ip = gethostbyname(gethostname())
+	
+	f = open( LX_QUEUE, 'a' )
+	line = 'radius %s %s %s %s %s %f %f %f \n'%(ip, outDir, prefix, timeStampMin, timeStampMax, centerLat, centerLon, radius)
+	f.write( line )
+	f.close()
+	print "You are %i in the request queue <P>"%(len(lines)+1)
+	
+	print """
+These tools aren't very fancy, so there will be no email confirmation 
+when your request is ready.  When they files are there, the request is 
+finished.  When ready, your requested data will show up at:<br>
+	"""
+	print '<a href="http://lxarchive.ensb.us/media/%s">http://lxarchive.ensb.us/media/%s</a>'%(key, key)
+	print """<br>
+Please record this link, as there will be no way to recover it later"""
+
+
+print """
+  </body>
+</html>
+"""

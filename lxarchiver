@@ -1,0 +1,236 @@
+#!/usr/bin/env python
+
+import enipy as lx
+import time, os
+
+###
+# important paths to where things are at
+LX_QUEUE = '/datastore2/lxarchive/lx.queue'
+LX_LOG   = '/datastore2/lxarchive/lx.log'
+LX_PULSE_DATA  = '/datastore2/Pulse/'
+LX_FLASH_DATA  = '/datastore2/Flash/'
+
+def get_bbox( outputDir, outputPrefix, tRange, bbox, pulse=True ):
+	"""handles bounding box requests
+	"""
+	tlnData = lx.Report()	#we'll reuse this
+	timeCurrentFile = tRange[0]
+	
+	while timeCurrentFile < tRange[1]+24*60*60:
+		#construct file name based on the time
+		inFile = time.strftime( '%Y/%m/LtgFlashPortions%Y%m%d.state', time.gmtime(timeCurrentFile) )
+		
+		#append the directory location, noting that pulse data and 
+		#flash data are in different directories
+		if pulse:
+			inFile = os.path.join( LX_PULSE_DATA, inFile )
+		else:
+			inFile = os.path.join( LX_FLASH_DATA, inFile )
+
+		#check to see if the data actually exists
+		if not os.path.exists( inFile ):
+			print '%s not available'%inFile
+			timeCurrentFile += 24*60*60
+			continue
+
+		#read the data
+		tlnData.load_state( inFile )
+		
+		#limit the data, bounding box limiting is easy
+		m = (tlnData.time>tRange[0])&(tlnData.time<tRange[1])&\
+			(tlnData.lat>bbox[0][0])&(tlnData.lat<bbox[0][1])&\
+			(tlnData.lon>bbox[1][0])&(tlnData.lon<bbox[1][1])
+		tlnData.truncate( m )
+		
+		#what is the output path?
+		outFile = outputPrefix+ time.strftime( '%Y%m%d.csv', time.gmtime(timeCurrentFile) )
+		#output directory
+		outFile = os.path.join( outputDir, outFile )
+
+		#now we write out the data.  There's a chance that the file is 
+		#empty, in whice case I've been told to create an empty placeholder 
+		#file.
+		if len( tlnData.time ) > 0:
+			#write the output
+			tlnData.write( outFile )
+		else:
+			#we want to create an empty file
+			f = open( outFile, 'w' )
+			f.write( '' )
+			f.close()
+			
+		#goto the next day
+		timeCurrentFile += 24*60*60
+
+
+def get_radius( outputDir, outputPrefix, tRange, center, radius, pulse=True ):
+	tlnData = lx.Report()	#we'll reuse this
+	timeCurrentFile = tRange[0]
+	
+	while timeCurrentFile < tRange[1]+24*60*60:
+		inFile = time.strftime( '%Y/%m/LtgFlashPortions%Y%m%d.state', time.gmtime(timeCurrentFile) )
+		#append the directory location
+		inFile = os.path.join( LX_DATA, inFile )
+
+		if not os.path.exists( inFile ):
+			print '%s not available'%inFile
+			timeCurrentFile += 24*60*60
+			continue
+
+		#read the data
+		tlnData.load_state( inFile )
+		
+		###
+		# limit to an approximate bounding box (+/- 10 degrees )
+		m = (tlnData.time>tRange[0])&(tlnData.time<tRange[1])&\
+			(tlnData.lat>center[0]-10)&(tlnData.lat<center[0]+10)&\
+			(tlnData.lon>center[1]-10)&(tlnData.lon<center[1]+10)
+		tlnData.truncate( m )
+		
+		###
+		# calculate the range to all pulses left
+		# this is an expensive calculation, so we do it as the last filter 
+		# so that there are as few calculations as possible
+		D = lx.spherical_distance( tlnData.lat, center[0], tlnData.lon, center[1] )
+		m = D < radius
+		tlnData.truncate[m]
+
+		#what is the output path?
+		outFile = outputPrefix+ time.strftime( '%Y%m%d.csv', time.gmtime(timeCurrentFile) )
+		#output directory
+		outFile = os.path.join( outputDir, outFile )
+
+		#now we write out the data.  There's a chance that the file is 
+		#empty, in whice case I've been told to create an empty placeholder 
+		#file.
+		if len( tlnData.time ) > 0:
+			#write the output
+			tlnData.write( outFile )
+		else:
+			#we want to create an empty file
+			f = open( outFile, 'w' )
+			f.write( '' )
+			f.close()
+			
+		#goto the next day
+		timeCurrentFile += 24*60*60				
+
+def log_request( S ):
+	"""we log all requests made to the lxArchiver, mostly for debugging 
+	purposes.  
+	"""
+	f = open( LX_LOG, 'a' )
+	if S[-1] == '\n':
+		f.write( S )
+	else:
+		f.write( S+'\n' )
+
+while True:
+	
+	#read in the queue
+	f = open( LX_QUEUE, 'r' )
+	lines = f.readlines()
+	f.close()
+	
+	#is there any input?
+	if len(lines) == 0:
+		time.sleep( 1 )
+		continue
+		
+	#write out all but the first line
+	f = open( LX_QUEUE, 'w' )
+	f.writelines( lines[1:] )
+	f.close()
+	
+	#####
+	# the first line is important
+	# the queue has lines of the format:
+	# request type, ip, *
+	# where * changes based on the type of request
+	line = lines[0].strip().split()
+	requestType  = line[0]
+
+	# bounding 
+	if requestType == 'bbox':
+		#bounding box request
+		#Format should be:
+		# bbox IP outDir prefix timeStart timeEnd latMin latMax lonMin lonMax
+		
+		outputDir    = line[2]
+		outputPrefix = line[3]
+		######
+		# There's a chance something is malformed
+		try:
+			timeStampStart = line[4]
+			timeStampEnd   = line[5]
+			latMin         = float(line[6])
+			latMax         = float(line[7])
+			lonMin         = float(line[8])
+			lonMax         = float(line[9])
+			#convert timestamps to epoc, if this fails then the time 
+			#was malformed
+			timeStart = lx.timeStamp2time( timeStampStart )[0]
+			timeEnd   = lx.timeStamp2time( timeStampEnd )[0]
+			
+			#put the request into a happy little package
+			tRange = [timeStart, timeEnd]
+			bbox   = [[latMin, latMax], [lonMin, lonMax]]
+			
+			#if we've gotten here, then everything worked
+			log_request( ' '.join( line ) + '\n' )
+			
+			#service the request
+			get_bbox( outputDir, outputPrefix, tRange, bbox )
+		except:
+			#log the error
+			log_request( 'ERROR ' + ' '.join( line ) + '\n' )
+			
+			#skip it, and move on
+			print 'some error in formatting'
+			continue
+		
+	elif requestType == 'radius':
+		#bounding box request
+		#Format should be:
+		# radius IP outDir prefix timeStart timeEnd cetnerLat centerLon radius
+		
+		outputDir    = line[2]
+		outputPrefix = line[3]
+		
+		######
+		# There's a chance something is malformed
+		try:
+			timeStampStart = line[4]
+			timeStampEnd   = line[5]
+			centerLat      = float(line[6])
+			centerLat      = float(line[7])
+			radius         = float(line[8])
+			#convert timestamps to epoc
+			timeStart = lx.timeStamp2time( timeStampStart )[0]
+			timeEnd   = lx.timeStamp2time( timeStampEnd )[0]
+
+			#put the request into a happy package
+			tRange = [timeStart, timeEnd]
+			center = [centerLat, centerLon]
+			radius = radius
+			
+			#if we've gotten here, then everything worked
+			log_request( ' '.join( line ) + '\n' )
+			
+			#service the request
+			get_radius( outputDir, outputPrefix, tRange, center, radius )			
+		except:
+			#log the error
+			log_request( 'ERROR ' + ' '.join( line ) + '\n' )
+			
+			#skip it, and move on
+			print 'some error in formatting'
+			continue		
+
+	#we put a sleep in the loop to keep it from pulling too many resources
+	time.sleep(1)
+	
+	
+
+
+	

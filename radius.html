@@ -1,0 +1,69 @@
+<html>
+  <head>
+    <title>LxArchive - by Earth Networks</title>
+  </head>
+
+  <body>
+    <div>
+		<a href="http://lts.ensb.us/lxarchive/">Lx Archive</a>  
+		<a href="http://lts.ensb.us/lxarchive/radius.html">Radius Search</a>
+    </div>
+    <hr>
+
+  <h1>Lx Historical Report Request</h1>
+  <p>
+	  Data is currently available from 2014/07/01 - 2017/06/20.  Data 
+	  from 2017 is still being converted and will be available soon.
+  </p>
+
+  <form method="post" action="reportRadius">
+	  <div><b>Prefix</b> to be prepended to the filenames (optional)<BR> 
+		   <input id="prefix" name="prefix" type="text">
+	  <BR>
+	  </div>
+	  <div>
+	  <b>Time Range: (i.e. 2017-01-31T15:00:00)</b><br>
+	  
+		<table>
+		<tbody>
+		<tr>
+		<td>
+			<input id="timeMin" name="timeMin" type="text">
+		</td>
+		<td>to</td>
+		<td>
+			<input id="timeMax" name="timeMax" type="text">
+		</td>
+		</tr>
+		</tbody>
+		</table>
+	  </div>
+		
+	  <div>
+		<b>Circle Center</b><br>
+		<table>
+		<tbody>
+		<tr>
+		<td>Lat:</td>
+		<td>
+			<input id="centerLat" name="centerLat" type="text">
+		</td>
+		<td>Lon:</td>
+		<td>
+			<input id="centerLon" name="centerLon" type="text">
+		</td>
+		</tr>
+		</tbody>
+		</table>	  
+	  </div>
+
+	  <div><b>Radius</b><BR> 
+		   <input id="radius" name="radius" type="text"> km
+	  <BR>
+	  </div>
+
+      <p><input type="submit" value="Submit"></p>
+
+	</form>
+  </body>
+</html>
