@@ -186,7 +186,8 @@ while True:
 			log_request( 'ERROR ' + ' '.join( line ) + '\n' )
 			
 			#skip it, and move on
-			print 'some error in formatting in bbox'
+			print 'some error in formatting'
+			print Exception
 			continue
 		
 	elif requestType == 'radius':
