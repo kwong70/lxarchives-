@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#fixMaster
+
 import enipy as lx
 import time, os
 
@@ -27,6 +27,8 @@ def get_bbox( outputDir, outputPrefix, tRange, bbox, pulse=True ):
 		else:
 			inFile = os.path.join( LX_FLASH_DATA, inFile )
 
+		print inFile
+
 		#check to see if the data actually exists
 		if not os.path.exists( inFile ):
 			print '%s not available'%inFile
@@ -43,7 +45,7 @@ def get_bbox( outputDir, outputPrefix, tRange, bbox, pulse=True ):
 		tlnData.truncate( m )
 		
 		#what is the output path?
-		outFile = outputPrefix+ time.strftime( '%Y%m%d.csv', time.gmtime(timeCurrentFile) )
+		outFile = z+ time.strftime( '%Y%m%d.csv', time.gmtime(timeCurrentFile) )
 		#output directory
 		outFile = os.path.join( outputDir, outFile )
 
@@ -186,8 +188,7 @@ while True:
 			log_request( 'ERROR ' + ' '.join( line ) + '\n' )
 			
 			#skip it, and move on
-			print 'some error in formatting'
-			print str(e)
+			print 'some error in formatting' + str(e)
 			continue
 		
 	elif requestType == 'radius':
