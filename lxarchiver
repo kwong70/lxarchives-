@@ -181,13 +181,13 @@ while True:
 			
 			#service the request
 			get_bbox( outputDir, outputPrefix, tRange, bbox )
-		except:
+		except Exception, e:
 			#log the error
 			log_request( 'ERROR ' + ' '.join( line ) + '\n' )
 			
 			#skip it, and move on
 			print 'some error in formatting'
-			print Exception
+			print str(e)
 			continue
 		
 	elif requestType == 'radius':
