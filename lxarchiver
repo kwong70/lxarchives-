@@ -47,14 +47,20 @@ def get_bbox( outputDir, outputPrefix, tRange, bbox, ltType ):
 		tlnData.truncate( m )
 
 		#what is the output path?
+<<<<<<< HEAD
 
+=======
+>>>>>>> 13f724d686c782e03879936cca3d32356e9d20ea
 
 		outFile = time.strftime( '%Y%m%d.csv', time.gmtime(timeCurrentFile) )
 
 		outFile = outputPrefix+ time.strftime( '%Y%m%d.csv', time.gmtime(timeCurrentFile) )
 
 		outFile = outputPrefix+ltType+ time.strftime( '%Y%m%d.csv', time.gmtime(timeCurrentFile) )
+<<<<<<< HEAD
 
+=======
+>>>>>>> 13f724d686c782e03879936cca3d32356e9d20ea
 
 		#output directory
 
