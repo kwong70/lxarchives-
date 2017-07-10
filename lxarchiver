@@ -195,13 +195,13 @@ while True:
 			log_request( ' '.join( line ) + '\n' )
 			
 			#service the request
-<<<<<<< HEAD
+
 			get_bbox( outputDir, outputPrefix, tRange, bbox )
 		except Exception, e:
-=======
+
 			get_bbox( outputDir, outputPrefix, tRange, bbox, ltType )
 		except:
->>>>>>> radioButton
+
 			#log the error
 			log_request( 'ERROR ' + ' '.join( line ) + '\n' )
 			
