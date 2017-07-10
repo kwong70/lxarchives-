@@ -10,7 +10,7 @@ LX_LOG   = '/datastore2/lxarchive/lx.log'
 LX_PULSE_DATA  = '/datastore2/Pulse/'
 LX_FLASH_DATA  = '/datastore2/Flash/'
 
-def get_bbox( outputDir, outputPrefix, tRange, bbox, pulse=True ):
+def get_bbox( outputDir, outputPrefix, tRange, bbox, ltType ):
 	print 'Job: ' + outputPrefix + ' started *********'
 	"""handles bounding box requests
 	"""
@@ -23,12 +23,17 @@ def get_bbox( outputDir, outputPrefix, tRange, bbox, pulse=True ):
 		
 		#append the directory location, noting that pulse data and 
 		#flash data are in different directories
-		if pulse:
+		if ltType=='pulse_':
+			inFile = time.strftime( '%Y/%m/LtgFlashPortions%Y%m%d.state', time.gmtime(timeCurrentFile) )
 			inFile = os.path.join( LX_PULSE_DATA, inFile )
 		else:
+			inFile = time.strftime( '%Y/%m/LtgFlash%Y%m%d.state', time.gmtime(timeCurrentFile) )
 			inFile = os.path.join( LX_FLASH_DATA, inFile )
 
+<<<<<<< HEAD
 		print inFile
+=======
+>>>>>>> radioButton
 
 		#check to see if the data actually exists
 		if not os.path.exists( inFile ):
@@ -46,13 +51,19 @@ def get_bbox( outputDir, outputPrefix, tRange, bbox, pulse=True ):
 		tlnData.truncate( m )
 
 		#what is the output path?
+<<<<<<< HEAD
 
 		outFile = time.strftime( '%Y%m%d.csv', time.gmtime(timeCurrentFile) )
 
 		outFile = outputPrefix+ time.strftime( '%Y%m%d.csv', time.gmtime(timeCurrentFile) )
+=======
+		outFile = outputPrefix+ltType+ time.strftime( '%Y%m%d.csv', time.gmtime(timeCurrentFile) )
+>>>>>>> radioButton
 
 		#output directory
+
 		outFile = os.path.join( outputDir, outFile )
+
 
 		#now we write out the data.  There's a chance that the file is 
 		#empty, in whice case I've been told to create an empty placeholder 
@@ -61,7 +72,7 @@ def get_bbox( outputDir, outputPrefix, tRange, bbox, pulse=True ):
 			#write the output
 			tlnData.write( outFile )
 		else:
-			print 'No data found: ' + outFile
+			print 'No data found: ' + inFile
 			#we want to create an empty file
 			f = open( outFile, 'w' )
 			f.write( '' )
@@ -158,6 +169,7 @@ while True:
 	# where * changes based on the type of request
 	line = lines[0].strip().split()
 	requestType  = line[0]
+	ltType = line[10]
 
 	# bounding 
 	if requestType == 'bbox':
@@ -189,8 +201,13 @@ while True:
 			log_request( ' '.join( line ) + '\n' )
 			
 			#service the request
+<<<<<<< HEAD
 			get_bbox( outputDir, outputPrefix, tRange, bbox )
 		except Exception, e:
+=======
+			get_bbox( outputDir, outputPrefix, tRange, bbox, ltType )
+		except:
+>>>>>>> radioButton
 			#log the error
 			log_request( 'ERROR ' + ' '.join( line ) + '\n' )
 			
