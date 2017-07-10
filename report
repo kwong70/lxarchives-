@@ -167,3 +167,5 @@ print """
   </body>
 </html>
 """
+#Output if everything works
+#searchType IP outFile prefix startDate endDate minLat maxLat minLon maxLon ltType
