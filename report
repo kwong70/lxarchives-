@@ -79,6 +79,8 @@ form = cgi.FieldStorage()
 formGood = True
 
 prefix = form.getvalue("prefix", 'lxarchive_')
+#Gets radio Button info, default set to pulse in html
+ltType = form.getvalue("ltType", None)
 ###
 # deal with prefix formatting
 prefix = '_'.join( prefix.split() )
@@ -146,7 +148,7 @@ if formGood:
 	ip = cgi.escape(os.environ["REMOTE_ADDR"])
 	
 	f = open( LX_QUEUE, 'a' )
-	line = 'bbox %s %s %s %s %s %f %f %f %f \n'%(ip, outDir, prefix, timeStampMin, timeStampMax, latMin, latMax, lonMin, lonMax)
+	line = 'bbox %s %s %s %s %s %f %f %f %f %s \n'%(ip, outDir, prefix, timeStampMin, timeStampMax, latMin, latMax, lonMin, lonMax, ltType)
 	f.write( line )
 	f.close()
 	print "You are %i in the request queue <P>"%(len(lines)+1)
