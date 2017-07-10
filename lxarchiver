@@ -41,12 +41,14 @@ def get_bbox( outputDir, outputPrefix, tRange, bbox, pulse=True ):
 			(tlnData.lat>bbox[0][0])&(tlnData.lat<bbox[0][1])&\
 			(tlnData.lon>bbox[1][0])&(tlnData.lon<bbox[1][1])
 		tlnData.truncate( m )
-		
+		print 'inFile: ' + inFile
 		#what is the output path?
 		outFile = outputPrefix+ time.strftime( '%Y%m%d.csv', time.gmtime(timeCurrentFile) )
+		print 'outFile: ' + outFile
 		#output directory
 		outFile = os.path.join( outputDir, outFile )
 
+		print 'changed outFile: ' + outFile
 		#now we write out the data.  There's a chance that the file is 
 		#empty, in whice case I've been told to create an empty placeholder 
 		#file.
