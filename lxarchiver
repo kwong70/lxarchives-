@@ -11,6 +11,7 @@ LX_PULSE_DATA  = '/datastore2/Pulse/'
 LX_FLASH_DATA  = '/datastore2/Flash/'
 
 def get_bbox( outputDir, outputPrefix, tRange, bbox, pulse=True ):
+	print 'Job: ' + outputPrefix + ' started *********'
 	"""handles bounding box requests
 	"""
 	tlnData = lx.Report()	#we'll reuse this
@@ -43,9 +44,14 @@ def get_bbox( outputDir, outputPrefix, tRange, bbox, pulse=True ):
 			(tlnData.lat>bbox[0][0])&(tlnData.lat<bbox[0][1])&\
 			(tlnData.lon>bbox[1][0])&(tlnData.lon<bbox[1][1])
 		tlnData.truncate( m )
-		
+
 		#what is the output path?
+<<<<<<< HEAD
 		outFile = time.strftime( '%Y%m%d.csv', time.gmtime(timeCurrentFile) )
+=======
+		outFile = outputPrefix+ time.strftime( '%Y%m%d.csv', time.gmtime(timeCurrentFile) )
+
+>>>>>>> radioButton
 		#output directory
 		outFile = os.path.join( outputDir, outFile )
 
@@ -56,6 +62,7 @@ def get_bbox( outputDir, outputPrefix, tRange, bbox, pulse=True ):
 			#write the output
 			tlnData.write( outFile )
 		else:
+			print 'No data found: ' + outFile
 			#we want to create an empty file
 			f = open( outFile, 'w' )
 			f.write( '' )
@@ -63,6 +70,7 @@ def get_bbox( outputDir, outputPrefix, tRange, bbox, pulse=True ):
 			
 		#goto the next day
 		timeCurrentFile += 24*60*60
+	print 'Job: ' + outputPrefix + ' ended *********'
 
 
 def get_radius( outputDir, outputPrefix, tRange, center, radius, pulse=True ):
