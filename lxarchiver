@@ -23,7 +23,7 @@ def get_bbox( outputDir, outputPrefix, tRange, bbox, ltType ):
 		
 		#append the directory location, noting that pulse data and 
 		#flash data are in different directories
-		if ltType=='pulse':
+		if ltType=='pulse_':
 			inFile = time.strftime( '%Y/%m/LtgFlashPortions%Y%m%d.state', time.gmtime(timeCurrentFile) )
 			inFile = os.path.join( LX_PULSE_DATA, inFile )
 		else:
@@ -47,14 +47,12 @@ def get_bbox( outputDir, outputPrefix, tRange, bbox, ltType ):
 		tlnData.truncate( m )
 
 		#what is the output path?
-		outFile = outputPrefix+ltType+'_'+ time.strftime( '%Y%m%d.csv', time.gmtime(timeCurrentFile) )
+		outFile = outputPrefix+ltType+ time.strftime( '%Y%m%d.csv', time.gmtime(timeCurrentFile) )
 
 		#output directory
-		print outputDir
-		print outFile
 
 		outFile = os.path.join( outputDir, outFile )
-		print outFile
+
 
 		#now we write out the data.  There's a chance that the file is 
 		#empty, in whice case I've been told to create an empty placeholder 
