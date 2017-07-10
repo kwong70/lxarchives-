@@ -46,12 +46,11 @@ def get_bbox( outputDir, outputPrefix, tRange, bbox, pulse=True ):
 		tlnData.truncate( m )
 
 		#what is the output path?
-<<<<<<< HEAD
+
 		outFile = time.strftime( '%Y%m%d.csv', time.gmtime(timeCurrentFile) )
-=======
+
 		outFile = outputPrefix+ time.strftime( '%Y%m%d.csv', time.gmtime(timeCurrentFile) )
 
->>>>>>> radioButton
 		#output directory
 		outFile = os.path.join( outputDir, outFile )
 
