@@ -50,7 +50,7 @@ def get_bbox( outputDir, outputPrefix, tRange, bbox, ltType ):
 		outFile = outputPrefix+ time.strftime( '%Y%m%d.csv', time.gmtime(timeCurrentFile) )
 
 		#output directory
-		outFile = os.path.join( outputDir, outFile )
+		outFile = os.path.join( outputDir,ltType, outFile )
 
 		#now we write out the data.  There's a chance that the file is 
 		#empty, in whice case I've been told to create an empty placeholder 
