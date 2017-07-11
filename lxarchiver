@@ -164,6 +164,11 @@ while True:
 	line = lines[0].strip().split()
 	requestType  = line[0]
 	ltType = line[10]
+	cg = line[11]
+	ci = line[12]
+	wwlln = line[13]
+
+	print type(cg)
 
 	# bounding 
 	if requestType == 'bbox':
