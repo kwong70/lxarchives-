@@ -47,10 +47,19 @@ def get_bbox( outputDir, outputPrefix, tRange, bbox, ltType, cg, ic, wwlln ):
 			(tlnData.lat>bbox[0][0])&(tlnData.lat<bbox[0][1])&\
 			(tlnData.lon>bbox[1][0])&(tlnData.lon<bbox[1][1])
 
-		#sets an array with the length of tlnData to all false
-		filter = np.zeros(tlnData.type.shape, dtype='bool')
 
-		print filter.shape 
+		#sets an array with the length of tlnData to all false
+		filt = np.zeros(tlnData.type.shape, dtype='bool')
+		detectWant= [cg, ic, wwlln]
+
+		for i in range(3):
+			if detectWant[i]:
+				detectNum=i
+				if(i==2):
+					detectNum = 40
+				filt |= tlnData.type==detectNum
+
+		m&=filt
 
 		tlnData.truncate( m )
 
