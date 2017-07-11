@@ -12,7 +12,9 @@ LX_FLASH_DATA  = '/datastore2/Flash/'
 
 def get_bbox( outputDir, outputPrefix, tRange, bbox, ltType, cg, ci, wwlln ):
 	print 'Job: ' + outputPrefix + ' started *********'
-	print cg + ci + wwlln
+	print cg  
+	print ci 
+	print wwlln
 	"""handles bounding box requests
 	"""
 	tlnData = lx.Report()	#we'll reuse this
