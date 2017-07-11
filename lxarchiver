@@ -164,9 +164,25 @@ while True:
 	line = lines[0].strip().split()
 	requestType  = line[0]
 	ltType = line[10]
+
+	#changing variable type from string to boolean
 	cg = line[11]
+	if(cg == "true"):
+		cg = True 
+	else:
+		cg = False 
+
 	ci = line[12]
+	if(ci == "true"):
+		ci = True 
+	else:
+		ci = False 
+
 	wwlln = line[13]
+	if(wwlln == "true"):
+		wwlln = True 
+	else:
+		wwlln = False 
 
 	print type(cg)
 

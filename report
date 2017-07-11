@@ -84,22 +84,12 @@ ltType = form.getvalue("ltType", None)
 
 #Gets checkBox info, checked = true, unchecked = false. Changes value from String to boolean
 cg = form.getvalue("cg", "false")
-if(cg == "true"):
-	cg = True 
-else:
-	cg = False 
 
 ci = form.getvalue("ci", "false")
-if(ci == "true"):
-	ci = True 
-else:
-	ci = False 
+
 
 wwlln = form.getvalue("wwlln", "false")
-if(wwlln == "true"):
-	wwlln = True 
-else:
-	wwlln = False 
+
 
 ###
 # deal with prefix formatting
