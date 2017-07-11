@@ -173,22 +173,33 @@ while True:
 
 	#changing variable type from string to boolean
 	cg = line[11]
+	print 'CG before: '+cg 
 	if(cg == "true"):
 		cg = True 
 	else:
 		cg = False 
+	print type(cg)
+	print cg 
+
 
 	ci = line[12]
+	print 'ci before: ' + ci 
 	if(ci == "true"):
 		ci = True 
 	else:
 		ci = False 
+	print type(ci)
+	print ci
+
 
 	wwlln = line[13]
+	print 'wwlln before: ' + wwlln
 	if(wwlln == "true"):
 		wwlln = True 
 	else:
 		wwlln = False 
+	print type(wwlln)
+	print wwlln
 
 	# bounding 
 	if requestType == 'bbox':
