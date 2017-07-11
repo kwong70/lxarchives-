@@ -12,12 +12,7 @@ LX_FLASH_DATA  = '/datastore2/Flash/'
 
 def get_bbox( outputDir, outputPrefix, tRange, bbox, ltType, cg, ic, wwlln ):
 	print 'Job: ' + outputPrefix + ' started *********'
-	print 'CG is: ' 
-	print cg  
-	print 'ic is: ' 
-	print ic 
-	print 'wwlln is: ' 
-	print wwlln
+
 	"""handles bounding box requests
 	"""
 	tlnData = lx.Report()	#we'll reuse this
@@ -50,6 +45,12 @@ def get_bbox( outputDir, outputPrefix, tRange, bbox, ltType, cg, ic, wwlln ):
 		m = (tlnData.time>tRange[0])&(tlnData.time<tRange[1])&\
 			(tlnData.lat>bbox[0][0])&(tlnData.lat<bbox[0][1])&\
 			(tlnData.lon>bbox[1][0])&(tlnData.lon<bbox[1][1])
+
+		#sets an array with the length of tlnData to all false
+		filter = np.zeros(tlnData.type.shape, dtype='bool')
+
+		print filter.shape 
+		
 		tlnData.truncate( m )
 
 		#what is the output path?
@@ -173,33 +174,23 @@ while True:
 
 	#changing variable type from string to boolean
 	cg = line[11]
-	print 'CG before: '+cg 
 	if(cg == "true"):
 		cg = True 
 	else:
 		cg = False 
-	print type(cg)
-	print cg 
-
 
 	ic = line[12]
-	print 'ic before: ' + ic 
 	if(ic == "true"):
 		ic = True 
 	else:
 		ic = False 
-	print type(ic)
-	print ic
 
 
 	wwlln = line[13]
-	print 'wwlln before: ' + wwlln
 	if(wwlln == "true"):
 		wwlln = True 
 	else:
 		wwlln = False 
-	print type(wwlln)
-	print wwlln
 
 	# bounding 
 	if requestType == 'bbox':
