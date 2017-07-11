@@ -184,8 +184,6 @@ while True:
 	else:
 		wwlln = False 
 
-	print type(cg)
-
 	# bounding 
 	if requestType == 'bbox':
 		#bounding box request
@@ -218,8 +216,9 @@ while True:
 			#service the request
 
 			get_bbox( outputDir, outputPrefix, tRange, bbox )
+			print 'went all the way through'
 		except Exception, e:
-
+			print 'hit Exception e'
 			get_bbox( outputDir, outputPrefix, tRange, bbox, ltType )
 		except:
 
