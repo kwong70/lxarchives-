@@ -217,9 +217,6 @@ while True:
 
 			get_bbox( outputDir, outputPrefix, tRange, bbox, ltType )
 			print 'went all the way through'
-		except Exception, e:
-			print 'hit Exception e'
-			get_bbox( outputDir, outputPrefix, tRange, bbox, ltType )
 		except:
 
 			#log the error
