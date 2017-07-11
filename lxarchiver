@@ -215,7 +215,7 @@ while True:
 			
 			#service the request
 
-			get_bbox( outputDir, outputPrefix, tRange, bbox )
+			get_bbox( outputDir, outputPrefix, tRange, bbox, ltType )
 			print 'went all the way through'
 		except Exception, e:
 			print 'hit Exception e'
