@@ -2,6 +2,7 @@
 
 import enipy as lx
 import time, os
+import numpy as np
 
 ###
 # important paths to where things are at
@@ -50,7 +51,7 @@ def get_bbox( outputDir, outputPrefix, tRange, bbox, ltType, cg, ic, wwlln ):
 		filter = np.zeros(tlnData.type.shape, dtype='bool')
 
 		print filter.shape 
-		
+
 		tlnData.truncate( m )
 
 		#what is the output path?
