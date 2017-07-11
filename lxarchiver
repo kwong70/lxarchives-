@@ -219,7 +219,7 @@ while True:
 			#service the request
 
 			get_bbox( outputDir, outputPrefix, tRange, bbox, ltType, cg, ci, wwlln )
-		except:
+		except Exception, e:
 
 			#log the error
 			log_request( 'ERROR ' + ' '.join( line ) + '\n' )
