@@ -50,6 +50,8 @@ def get_bbox( outputDir, outputPrefix, tRange, bbox, ltType, cg, ic, wwlln ):
 
 		#sets an array with the length of tlnData to all false
 		filt = np.zeros(tlnData.type.shape, dtype='bool')
+
+		#Array of 3 boolenas, Does user want cg, ic, wwlln?
 		detectWant= [cg, ic, wwlln]
 
 		for i in range(3):
