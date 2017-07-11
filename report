@@ -85,8 +85,7 @@ ltType = form.getvalue("ltType", None)
 #Gets checkBox info, checked = true, unchecked = false. Changes value from String to boolean
 cg = form.getvalue("cg", "false")
 
-ci = form.getvalue("ci", "false")
-
+ic = form.getvalue("ic", "false")
 
 wwlln = form.getvalue("wwlln", "false")
 
@@ -158,7 +157,7 @@ if formGood:
 	ip = cgi.escape(os.environ["REMOTE_ADDR"])
 	
 	f = open( LX_QUEUE, 'a' )
-	line = 'bbox %s %s %s %s %s %f %f %f %f %s %s %s %s \n'%(ip, outDir, prefix, timeStampMin, timeStampMax, latMin, latMax, lonMin, lonMax, ltType, cg, ci, wwlln)
+	line = 'bbox %s %s %s %s %s %f %f %f %f %s %s %s %s \n'%(ip, outDir, prefix, timeStampMin, timeStampMax, latMin, latMax, lonMin, lonMax, ltType, cg, ic, wwlln)
 	f.write( line )
 	f.close()
 	print "You are %i in the request queue <P>"%(len(lines)+1)

@@ -10,12 +10,12 @@ LX_LOG   = '/datastore2/lxarchive/lx.log'
 LX_PULSE_DATA  = '/datastore2/Pulse/'
 LX_FLASH_DATA  = '/datastore2/Flash/'
 
-def get_bbox( outputDir, outputPrefix, tRange, bbox, ltType, cg, ci, wwlln ):
+def get_bbox( outputDir, outputPrefix, tRange, bbox, ltType, cg, ic, wwlln ):
 	print 'Job: ' + outputPrefix + ' started *********'
 	print 'CG is: ' 
 	print cg  
-	print 'CI is: ' 
-	print ci 
+	print 'ic is: ' 
+	print ic 
 	print 'wwlln is: ' 
 	print wwlln
 	"""handles bounding box requests
@@ -182,14 +182,14 @@ while True:
 	print cg 
 
 
-	ci = line[12]
-	print 'ci before: ' + ci 
-	if(ci == "true"):
-		ci = True 
+	ic = line[12]
+	print 'ic before: ' + ic 
+	if(ic == "true"):
+		ic = True 
 	else:
-		ci = False 
-	print type(ci)
-	print ci
+		ic = False 
+	print type(ic)
+	print ic
 
 
 	wwlln = line[13]
@@ -232,7 +232,7 @@ while True:
 			
 			#service the request
 
-			get_bbox( outputDir, outputPrefix, tRange, bbox, ltType, cg, ci, wwlln )
+			get_bbox( outputDir, outputPrefix, tRange, bbox, ltType, cg, ic, wwlln )
 		except Exception, e:
 
 			#log the error
