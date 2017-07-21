@@ -101,13 +101,13 @@ except:
 # get center
 try:
 	centerLat = form.getvalue("centerLat", None)
-	centerLon = float( centerLat )
-	latMax = form.getvalue("centerLon", None)
+	centerLat = float( centerLat )
+	centerLon = form.getvalue("centerLon", None)
 	centerLon = float( centerLon )
 	print 'Lat: ',centerLat
 	print 'Long: ',centerLon 
 	print centerLat < -90 or centerLat > 90 or centerLon < -180 or centerLon > 180
-	if (centerLat < -90 or centerLat > 90 or centerLon < -180 or centerLon > 180):
+	if centerLat < -90 or centerLat > 90 or centerLon < -180 or centerLon > 180:
 		raise ValueError
 	#~ print 'Latitude Validation : OK <P>'
 except:
