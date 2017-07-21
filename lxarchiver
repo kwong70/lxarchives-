@@ -182,23 +182,23 @@ while True:
 	# where * changes based on the type of request
 	line = lines[0].strip().split()
 	requestType  = line[0]
-	ltType = line[10]
+	ltType = line[6]
 
 	#changing variable type from string to boolean
-	cg = line[11]
+	cg = line[7]
 	if(cg == "true"):
 		cg = True 
 	else:
 		cg = False 
 
-	ic = line[12]
+	ic = line[8]
 	if(ic == "true"):
 		ic = True 
 	else:
 		ic = False 
 
 
-	wwlln = line[13]
+	wwlln = line[9]
 	if(wwlln == "true"):
 		wwlln = True 
 	else:
@@ -217,10 +217,10 @@ while True:
 		try:
 			timeStampStart = line[4]
 			timeStampEnd   = line[5]
-			latMin         = float(line[6])
-			latMax         = float(line[7])
-			lonMin         = float(line[8])
-			lonMax         = float(line[9])
+			latMin         = float(line[10])
+			latMax         = float(line[11])
+			lonMin         = float(line[12])
+			lonMax         = float(line[13])
 			#convert timestamps to epoc, if this fails then the time 
 			#was malformed
 			timeStart = lx.timeStamp2time( timeStampStart )[0]
