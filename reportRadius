@@ -104,6 +104,8 @@ try:
 	centerLon = float( centerLat )
 	latMax = form.getvalue("centerLon", None)
 	centerLon = float( centerLon )
+	print 'centerLat <P>'
+	print 'centerLon <P>'
 	if centerLat < -90 or centerLat > 90 or centerLon < -180 or centerLon > 180:
 		raise ValueError
 	#~ print 'Latitude Validation : OK <P>'
