@@ -246,6 +246,7 @@ while True:
 			continue
 		
 	elif requestType == 'radius':
+		print 'hit'
 		#bounding box request
 		#Format should be:
 		# radius IP outDir prefix timeStart timeEnd cetnerLat centerLon radius
