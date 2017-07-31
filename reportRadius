@@ -142,7 +142,7 @@ if formGood:
 	line = 'radius %s %s %s %s %s %f %f %f \n'%(ip, outDir, prefix, timeStampMin, timeStampMax, centerLat, centerLon, radius)
 	f.write( line )
 	f.close()
-	print line 
+
 	print "You are %i in the request queue <P>"%(len(lines)+1)
 	
 	print """
